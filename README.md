@@ -68,10 +68,15 @@ data directory, sender config, and webhook connectivity.
 # Foreground (for testing)
 copilot-teams-bridge
 
-# Or as a systemd user service (Linux/WSL)
+# As a systemd user service (Linux/WSL)
 cp bridge.service ~/.config/systemd/user/copilot-teams-bridge.service
 systemctl --user daemon-reload
 systemctl --user enable --now copilot-teams-bridge
+
+# As a macOS LaunchAgent
+cp bridge.plist ~/Library/LaunchAgents/com.copilot-teams-bridge.plist
+# Edit the plist to set your WorkingDirectory, then:
+launchctl load ~/Library/LaunchAgents/com.copilot-teams-bridge.plist
 ```
 
 ## How It Works
@@ -126,7 +131,8 @@ copilot-teams-bridge/
 │   ├── queue.py           # JSON task queue + file locking
 │   ├── config.py          # Env-based configuration
 │   └── doctor.py          # Setup diagnostics
-├── bridge.service         # Systemd unit template
+├── bridge.service         # Systemd unit template (Linux/WSL)
+├── bridge.plist           # LaunchAgent plist (macOS)
 ├── examples/              # Sample message files
 ├── tests/                 # Test suite
 └── docs/
