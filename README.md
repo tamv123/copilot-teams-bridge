@@ -1,5 +1,12 @@
 # Copilot Teams Bridge
 
+[![Platform: Windows](https://img.shields.io/badge/platform-Windows%20%7C%20WSL2-blue?logo=windows)](https://github.com/tamv123/copilot-teams-bridge)
+[![Platform: macOS](https://img.shields.io/badge/platform-macOS-blue?logo=apple)](https://github.com/tamv123/copilot-teams-bridge)
+[![Platform: Linux](https://img.shields.io/badge/platform-Linux-blue?logo=linux&logoColor=white)](https://github.com/tamv123/copilot-teams-bridge)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-brightgreen?logo=python&logoColor=white)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Tests: 37 passed](https://img.shields.io/badge/tests-37%20passed-brightgreen)](tests/)
+
 > Bridge Microsoft Teams ↔ GitHub Copilot CLI via Power Automate + asyncio daemon
 
 **Send messages in a Teams channel → get AI-powered responses from Copilot CLI.**
