@@ -9,10 +9,66 @@
 
 > Bridge Microsoft Teams ↔ GitHub Copilot CLI via Power Automate + asyncio daemon
 
-**Send messages in a Teams channel → get AI-powered responses from Copilot CLI.**
+**Send a message in Teams → get an AI-powered answer back — right in the same channel.**
 
 No Microsoft Graph API, no app registration, no admin approval needed.
 Uses Power Automate Workflows (included with M365) as the Teams interface.
+
+## Why?
+
+GitHub Copilot CLI is powerful, but it lives in your terminal. What if you could
+talk to it from **Microsoft Teams** — the app you already have open all day?
+
+With this bridge, you type a message in a Teams channel, and Copilot CLI processes
+it on your machine. The result appears as a reply in the same channel within minutes.
+
+**Use cases:**
+
+- 🔍 *"What changed in the last 3 commits?"* — Copilot checks git log and summarizes
+- 🐛 *"Why is the login test failing?"* — Copilot reads test output, finds the bug
+- 📊 *"Summarize the open issues in our repo"* — Copilot queries GitHub and reports back
+- 🚀 *"Deploy the staging branch"* — Copilot runs your deploy script (with `COPILOT_ALLOW_ALL=true`)
+- 📝 *"Draft a PR description for the auth refactor"* — Copilot reads the diff and writes it
+
+All from your phone, tablet, or any device with Teams — no terminal needed.
+
+## What It Looks Like
+
+```
+┌─────────────────────────────────────────────────────┐
+│  #copilot-bridge channel                            │
+│                                                     │
+│  👤 You:                                            │
+│  What are the top 5 largest files in the repo?      │
+│                                                     │
+│  🤖 Copilot Bridge:                                 │
+│  📝 Queued request #7.                              │
+│  "What are the top 5 largest files in the repo?"    │
+│  Processing within 60s.                             │
+│                                                     │
+│  🤖 Copilot Bridge:                                 │
+│  ⚙️ Processing #7: What are the top 5 largest...    │
+│                                                     │
+│  🤖 Copilot Bridge:                                 │
+│  ✅ #7 — done                                       │
+│                                                     │
+│  Here are the top 5 largest files:                  │
+│  1. data/model.bin — 48 MB                          │
+│  2. assets/video.mp4 — 22 MB                        │
+│  3. vendor/lib.wasm — 15 MB                         │
+│  4. docs/architecture.pdf — 8 MB                    │
+│  5. test/fixtures/dump.sql — 6 MB                   │
+└─────────────────────────────────────────────────────┘
+```
+
+Every request goes through 3 stages:
+1. **📝 Queued** — acknowledged immediately with a task ID
+2. **⚙️ Processing** — Copilot CLI is working on it
+3. **✅ Done** (or ⚠️ Failed) — result posted back with full output
+
+The bridge also sends a **💓 heartbeat** every hour so you know it's alive.
+
+## How It Works (under the hood)
 
 ```
 Teams Channel  ──→  Power Automate  ──→  OneDrive JSON  ──→  Daemon  ──→  Copilot CLI
@@ -86,14 +142,16 @@ cp bridge.plist ~/Library/LaunchAgents/com.copilot-teams-bridge.plist
 launchctl load ~/Library/LaunchAgents/com.copilot-teams-bridge.plist
 ```
 
-## How It Works
+## How It Works (under the hood)
 
-1. You post a message in your Teams channel
-2. Power Automate writes a JSON file to your OneDrive `/CopilotCommands/` folder
-3. OneDrive syncs the file to your local machine
-4. The daemon polls the folder every 2 minutes, reads new messages
-5. Messages are queued and processed through Copilot CLI
-6. Results are posted back to Teams via the webhook
+1. You post a message in your Teams channel (from any device)
+2. Power Automate detects it and writes a JSON file to your OneDrive
+3. OneDrive syncs the file to your local machine (Windows, Mac, or Linux)
+4. The daemon picks it up within 2 minutes, queues it, and acknowledges on Teams
+5. Copilot CLI processes the request in your project directory (with full repo context)
+6. The result is posted back to the same Teams channel
+
+**Response time:** ~2-5 minutes depending on complexity (polling + CLI execution).
 
 ### Built-in Commands
 
