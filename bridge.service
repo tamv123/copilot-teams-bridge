@@ -1,0 +1,29 @@
+# Systemd user service for Copilot Teams Bridge
+#
+# Install:
+#   cp bridge.service ~/.config/systemd/user/copilot-teams-bridge.service
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now copilot-teams-bridge
+#
+# Logs:
+#   journalctl --user -u copilot-teams-bridge -f
+
+[Unit]
+Description=Copilot Teams Bridge — Teams ↔ Copilot CLI daemon
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/copilot-teams-bridge
+ExecStart=/usr/bin/python3 -m bridge.daemon
+Restart=always
+RestartSec=10
+
+# Load .env file
+EnvironmentFile=-%h/copilot-teams-bridge/.env
+
+# WSL2: include Windows interop paths for Copilot CLI and PowerShell
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Windows/system32
+
+[Install]
+WantedBy=default.target
