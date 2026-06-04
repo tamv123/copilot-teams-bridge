@@ -1,3 +1,13 @@
+## 🚀 Work in Progress
+
+This repository is a work in progress, and I am actively looking for feedback and contributors to help refine it! 
+
+If you see something that can be optimized, a bug that needs squashing, or want to co-develop a feature, please feel free to:
+1. Open an **Issue** to discuss your ideas.
+2. Submit a **Pull Request** with your improvements.
+
+Let's collaborate and make this tool awesome!
+
 # Copilot Teams Bridge
 
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows%20%7C%20WSL2-blue?logo=windows)](https://github.com/tamv123/copilot-teams-bridge)
